@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neighborhood Market</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Neighborhood Market</h1>
+      <p>Shop local stores, add items, and check out fast.</p>
+    </header>
+
+    <main class="layout">
+      <section class="card" aria-labelledby="store-list-heading">
+        <h2 id="store-list-heading">1. Choose a Local Store</h2>
+        <div id="storeList" class="store-list"></div>
+      </section>
+
+      <section class="card" aria-labelledby="inventory-heading">
+        <h2 id="inventory-heading">2. Browse Inventory</h2>
+        <p id="selectedStoreLabel" class="muted"></p>
+        <div id="inventoryList" class="inventory-grid"></div>
+      </section>
+
+      <section class="card" aria-labelledby="cart-heading">
+        <h2 id="cart-heading">3. Your Cart</h2>
+        <ul id="cartItems" class="cart-items"></ul>
+        <p id="emptyCart" class="muted">Your cart is empty.</p>
+        <div class="cart-footer">
+          <span>Total:</span>
+          <strong id="cartTotal">$0.00</strong>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="checkout-heading" id="checkoutSection">
+        <h2 id="checkout-heading">4. Delivery & Payment</h2>
+        <form id="checkoutForm" novalidate>
+          <div class="form-grid">
+            <label>
+              Full Name
+              <input type="text" name="fullName" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" required />
+            </label>
+            <label class="full-width">
+              Street Address
+              <input type="text" name="street" required />
+            </label>
+            <label>
+              City
+              <input type="text" name="city" required />
+            </label>
+            <label>
+              State
+              <input type="text" name="state" required maxlength="2" placeholder="CA" />
+            </label>
+            <label>
+              ZIP Code
+              <input type="text" name="zip" required pattern="\d{5}" placeholder="94105" />
+            </label>
+            <label class="full-width">
+              Card Number
+              <input type="text" name="cardNumber" required inputmode="numeric" pattern="\d{16}" placeholder="1234123412341234" />
+            </label>
+            <label>
+              Expiration (MM/YY)
+              <input type="text" name="expiry" required pattern="(0[1-9]|1[0-2])\/\d{2}" placeholder="08/27" />
+            </label>
+            <label>
+              CVV
+              <input type="text" name="cvv" required inputmode="numeric" pattern="\d{3}" placeholder="123" />
+            </label>
+          </div>
+          <button id="payButton" type="submit">Pay for Order</button>
+          <p id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <aside class="mobile-cart-bar" id="mobileCartBar" aria-live="polite">
+      <div>
+        <strong id="mobileCartCount">0 items</strong>
+        <p id="mobileCartTotal">$0.00 total</p>
+      </div>
+      <button id="reviewOrderButton" type="button">Review & Pay</button>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>
