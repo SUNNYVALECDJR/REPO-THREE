@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuickCart Grocery Delivery</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Fresh groceries delivered fast</p>
+        <h1>QuickCart</h1>
+        <p>
+          Build your basket with produce, pantry staples, dairy, and frozen foods —
+          then schedule delivery in minutes.
+        </p>
+      </div>
+      <div class="hero-meta">
+        <p><strong>Delivery area:</strong> Downtown + Midtown</p>
+        <p><strong>Hours:</strong> 7:00 AM - 11:00 PM</p>
+        <p><strong>Free delivery:</strong> Orders over $35</p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section>
+        <h2>Shop groceries</h2>
+
+        <div class="toolbar" aria-label="Catalog controls">
+          <label>
+            Search
+            <input id="search" type="search" placeholder="Search items..." />
+          </label>
+          <label>
+            Category
+            <select id="category-filter">
+              <option value="all">All categories</option>
+            </select>
+          </label>
+          <label class="checkbox-row">
+            <input id="in-stock-only" type="checkbox" />
+            In-stock only
+          </label>
+          <button id="reset-filters" class="ghost">Reset filters</button>
+        </div>
+
+        <p id="catalog-summary" class="catalog-summary" aria-live="polite"></p>
+        <div id="catalog" class="catalog"></div>
+      </section>
+
+      <aside class="cart-panel">
+        <h2>Your cart</h2>
+        <ul id="cart-items" class="cart-items"></ul>
+        <p id="empty-cart" class="empty-state">Your cart is empty.</p>
+
+        <label for="promo">Promo code</label>
+        <div class="promo-row">
+          <input id="promo" placeholder="SAVE10" />
+          <button id="apply-promo" class="ghost">Apply</button>
+        </div>
+        <p id="promo-status" class="promo-status" aria-live="polite"></p>
+
+        <div class="totals">
+          <div><span>Items</span><span id="item-count">0</span></div>
+          <div><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+          <div><span>Delivery fee</span><span id="delivery-fee">$3.99</span></div>
+          <div><span>Service fee</span><span id="service-fee">$1.25</span></div>
+          <div id="discount-row" class="hidden"><span>Discount</span><span id="discount">-$0.00</span></div>
+          <div class="total"><span>Total</span><span id="grand-total">$5.24</span></div>
+        </div>
+
+        <label for="slot">Delivery slot</label>
+        <select id="slot">
+          <option value="asap">ASAP (30-40 min)</option>
+          <option value="evening">Today 6:00 PM - 7:00 PM</option>
+          <option value="night">Today 8:00 PM - 9:00 PM</option>
+          <option value="tomorrow">Tomorrow 9:00 AM - 10:00 AM</option>
+        </select>
+
+        <button id="checkout-btn" class="checkout">Place order</button>
+        <p id="order-status" class="order-status" aria-live="polite"></p>
+      </aside>
+    </main>
+
+    <template id="product-template">
+      <article class="card">
+        <img alt="" />
+        <div class="badges"></div>
+        <h3></h3>
+        <p class="category"></p>
+        <p class="description"></p>
+        <div class="card-footer">
+          <span class="price"></span>
+          <button>Add</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
