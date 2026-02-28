@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store Owner Console</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Store Management</p>
+        <h1>Owner Interface</h1>
+      </div>
+      <button id="new-order-btn" class="primary">Create Test Order</button>
+    </header>
+
+    <main class="layout">
+      <section class="panel panel--inventory" aria-labelledby="inventory-title">
+        <div class="panel-header">
+          <h2 id="inventory-title">Inventory Management</h2>
+          <span id="inventory-health" class="pill"></span>
+        </div>
+        <form id="inventory-form" class="form-grid">
+          <label>
+            Product
+            <input id="product-name" required placeholder="e.g. Colombian Coffee Beans" />
+          </label>
+          <label>
+            SKU
+            <input id="product-sku" required placeholder="e.g. COF-001" />
+          </label>
+          <label>
+            Category
+            <input id="product-category" required placeholder="e.g. Grocery" />
+          </label>
+          <label>
+            Quantity
+            <input id="product-qty" type="number" min="0" required />
+          </label>
+          <label>
+            Unit Cost ($)
+            <input id="product-cost" type="number" min="0" step="0.01" required />
+          </label>
+          <label>
+            Retail Price ($)
+            <input id="product-price" type="number" min="0" step="0.01" required />
+          </label>
+          <button class="primary" type="submit">Add Product</button>
+        </form>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Unit Cost</th>
+                <th>Retail Price</th>
+                <th>Margin</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel panel--pricing" aria-labelledby="pricing-title">
+        <div class="panel-header">
+          <h2 id="pricing-title">Pricing Controls</h2>
+        </div>
+        <label>
+          Apply markup to all products
+          <div class="inline">
+            <input id="markup" type="number" min="-90" max="300" step="1" value="10" />
+            <span>%</span>
+            <button id="apply-markup" class="secondary" type="button">Apply</button>
+          </div>
+        </label>
+        <div class="panel-subsection">
+          <h3>Price Alerts</h3>
+          <ul id="price-alerts" class="alerts"></ul>
+        </div>
+      </section>
+
+      <section class="panel panel--report" aria-labelledby="report-title">
+        <div class="panel-header">
+          <h2 id="report-title">Reporting Snapshot</h2>
+          <button id="refresh-report" class="secondary" type="button">Refresh</button>
+        </div>
+        <div class="stats-grid">
+          <article>
+            <p>Revenue (Today)</p>
+            <h3 id="stat-revenue">$0.00</h3>
+          </article>
+          <article>
+            <p>Total Orders</p>
+            <h3 id="stat-orders">0</h3>
+          </article>
+          <article>
+            <p>Low Stock Items</p>
+            <h3 id="stat-low-stock">0</h3>
+          </article>
+          <article>
+            <p>Gross Margin</p>
+            <h3 id="stat-margin">0%</h3>
+          </article>
+          <article>
+            <p>Pending Reviews</p>
+            <h3 id="stat-pending">0</h3>
+          </article>
+        </div>
+
+        <h3>Sales by Category</h3>
+        <div id="category-bars" class="bars"></div>
+
+        <h3 class="panel-subheading">Restock Recommendations</h3>
+        <ul id="restock-list" class="alerts"></ul>
+      </section>
+
+      <section class="panel panel--orders" aria-labelledby="orders-title">
+        <div class="panel-header">
+          <h2 id="orders-title">Order Review</h2>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Items</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="order-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <template id="order-action-template">
+      <div class="inline small-gap">
+        <button class="secondary approve">Approve</button>
+        <button class="danger reject">Reject</button>
+      </div>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
