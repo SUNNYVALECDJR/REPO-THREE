@@ -1,0 +1,264 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f6fa;
+  --panel: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --brand: #3b82f6;
+  --brand-dark: #2563eb;
+  --danger: #dc2626;
+  --border: #e5e7eb;
+  --ok: #16a34a;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--panel);
+  padding: 1rem clamp(1rem, 2vw, 1.75rem);
+  border-bottom: 1px solid var(--border);
+}
+
+h1, h2, h3, p { margin: 0; }
+
+.eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(460px, 1.55fr) minmax(280px, 0.95fr) minmax(320px, 1.1fr);
+  align-items: start;
+  padding: 1rem clamp(1rem, 2vw, 1.75rem) 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.panel--inventory { grid-column: 1; }
+.panel--pricing { grid-column: 2; }
+.panel--report { grid-column: 3; }
+.panel--orders { grid-column: 1 / -1; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.03);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.pill {
+  font-size: 0.8rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.form-grid > button {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+input {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.primary {
+  background: var(--brand);
+  color: white;
+}
+
+.primary:hover { background: var(--brand-dark); }
+
+.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.danger {
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.55rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.panel--inventory th:first-child,
+.panel--inventory td:first-child,
+.panel--orders th:nth-child(2),
+.panel--orders td:nth-child(2) {
+  min-width: 140px;
+}
+
+.inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.small-gap { gap: 0.35rem; }
+
+.panel-subsection {
+  margin-top: 1rem;
+}
+
+.alerts {
+  margin: 0.6rem 0 0;
+  padding-left: 1rem;
+  color: var(--muted);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(110px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stats-grid article {
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.65rem;
+}
+
+.stats-grid p {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.bars {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 110px 1fr 50px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.track {
+  background: #e5e7eb;
+  height: 0.7rem;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fill {
+  background: var(--ok);
+  height: 100%;
+}
+
+.status {
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+.status.pending { color: #d97706; }
+.status.approved { color: var(--ok); }
+.status.rejected { color: var(--danger); }
+
+@media (max-width: 768px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .topbar .primary {
+    width: 100%;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel--inventory,
+  .panel--pricing,
+  .panel--report,
+  .panel--orders {
+    grid-column: 1;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1280px) {
+  .layout {
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+  }
+
+  .panel--inventory,
+  .panel--orders {
+    grid-column: 1 / -1;
+  }
+
+  .panel--pricing,
+  .panel--report {
+    grid-column: auto;
+  }
+}
