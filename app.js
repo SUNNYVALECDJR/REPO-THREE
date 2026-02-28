@@ -21,6 +21,8 @@ const el = {
   statOrders: document.getElementById("stat-orders"),
   statLowStock: document.getElementById("stat-low-stock"),
   statMargin: document.getElementById("stat-margin"),
+  statPending: document.getElementById("stat-pending"),
+  restockList: document.getElementById("restock-list"),
   refreshReport: document.getElementById("refresh-report"),
   markup: document.getElementById("markup"),
   applyMarkup: document.getElementById("apply-markup"),
@@ -54,6 +56,7 @@ function renderInventory() {
 
   const lowStock = inventory.filter((i) => i.qty < 10).length;
   el.inventoryHealth.textContent = lowStock ? `${lowStock} low-stock warnings` : "Inventory healthy";
+  el.inventoryHealth.className = `pill${lowStock ? " warning" : ""}`;
 }
 
 function renderOrders() {
@@ -114,13 +117,16 @@ function renderPriceAlerts() {
 function renderReport() {
   const approvedOrders = orders.filter((o) => o.status === "Approved");
   const revenue = approvedOrders.reduce((sum, order) => sum + order.total, 0);
-  const lowStock = inventory.filter((i) => i.qty < 10).length;
+  const lowStockItems = inventory.filter((i) => i.qty < 10);
+  const lowStock = lowStockItems.length;
+  const pendingReviews = orders.filter((o) => o.status === "Pending").length;
   const avgMargin = inventory.reduce((sum, item) => sum + marginPercent(item), 0) / inventory.length;
 
   el.statRevenue.textContent = currency(revenue);
   el.statOrders.textContent = String(orders.length);
   el.statLowStock.textContent = String(lowStock);
   el.statMargin.textContent = `${avgMargin.toFixed(1)}%`;
+  el.statPending.textContent = String(pendingReviews);
 
   const categoryTotals = inventory.reduce((map, item) => {
     map[item.category] = (map[item.category] || 0) + item.price * Math.max(item.qty * 0.12, 1);
@@ -142,6 +148,24 @@ function renderReport() {
         <strong>${currency(total)}</strong>
       `;
       el.bars.appendChild(wrapper);
+    });
+
+  el.restockList.innerHTML = "";
+  if (!lowStockItems.length) {
+    const li = document.createElement("li");
+    li.textContent = "No restock actions needed";
+    el.restockList.appendChild(li);
+    return;
+  }
+
+  lowStockItems
+    .sort((a, b) => a.qty - b.qty)
+    .forEach((item) => {
+      const li = document.createElement("li");
+      const targetQty = 24;
+      const suggested = Math.max(targetQty - item.qty, 1);
+      li.textContent = `${item.name} (${item.sku}) — reorder ${suggested} units`;
+      el.restockList.appendChild(li);
     });
 }
 
