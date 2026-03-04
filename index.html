@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>User Profile</h1>
+      <p class="subtitle">Store customer information, address, payment details, and delivery instructions.</p>
+
+      <form id="profile-form" novalidate>
+        <section>
+          <h2>Contact Information</h2>
+          <div class="grid">
+            <label>
+              Full Name
+              <input type="text" name="fullName" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" required />
+            </label>
+            <label>
+              Phone
+              <input type="tel" name="phone" placeholder="(555) 555-5555" required />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Address</h2>
+          <div class="grid">
+            <label>
+              Street Address
+              <input type="text" name="street" required />
+            </label>
+            <label>
+              Apartment / Suite
+              <input type="text" name="apt" />
+            </label>
+            <label>
+              City
+              <input type="text" name="city" required />
+            </label>
+            <label>
+              State
+              <input type="text" name="state" required />
+            </label>
+            <label>
+              ZIP Code
+              <input type="text" name="zip" required />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Payment Details</h2>
+          <div class="grid">
+            <label>
+              Cardholder Name
+              <input type="text" name="cardholder" required />
+            </label>
+            <label>
+              Credit Card Number
+              <input type="text" name="cardNumber" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" required />
+            </label>
+            <label>
+              Expiration (MM/YY)
+              <input type="text" name="expiry" placeholder="MM/YY" maxlength="5" required />
+            </label>
+            <label>
+              CVV
+              <input type="password" name="cvv" inputmode="numeric" maxlength="4" required />
+            </label>
+          </div>
+        </section>
+
+        <section>
+          <h2>Delivery</h2>
+          <label>
+            Delivery Instructions
+            <textarea name="deliveryInstructions" rows="4" placeholder="Gate code, preferred drop-off area, call on arrival, etc."></textarea>
+          </label>
+        </section>
+
+        <div class="actions">
+          <button type="submit">Save Profile</button>
+          <button type="button" id="clear-btn" class="secondary">Clear Saved Profile</button>
+        </div>
+
+        <p id="status" aria-live="polite"></p>
+      </form>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
