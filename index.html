@@ -80,10 +80,22 @@
 
         <section>
           <h2>Delivery</h2>
-          <label>
-            Delivery Instructions
-            <textarea name="deliveryInstructions" rows="4" placeholder="Gate code, preferred drop-off area, call on arrival, etc."></textarea>
-          </label>
+          <div class="grid">
+            <label>
+              Preferred Delivery Time
+              <select name="preferredDeliveryTime" required>
+                <option value="" disabled selected>Select a delivery window</option>
+                <option value="Morning (8:00 AM - 12:00 PM)">Morning (8:00 AM - 12:00 PM)</option>
+                <option value="Afternoon (12:00 PM - 5:00 PM)">Afternoon (12:00 PM - 5:00 PM)</option>
+                <option value="Evening (5:00 PM - 9:00 PM)">Evening (5:00 PM - 9:00 PM)</option>
+                <option value="Anytime">Anytime</option>
+              </select>
+            </label>
+            <label>
+              Delivery Instructions
+              <textarea name="deliveryInstructions" rows="4" placeholder="Gate code, preferred drop-off area, call on arrival, etc."></textarea>
+            </label>
+          </div>
         </section>
 
         <div class="actions">
