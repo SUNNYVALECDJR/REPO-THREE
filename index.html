@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store Manager Interface</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>Store Manager Interface</h1>
+      <p>Manage catalog pricing and inventory from one place.</p>
+    </header>
+
+    <section class="card">
+      <h2>Add Product</h2>
+      <form id="product-form">
+        <label>
+          Product name
+          <input id="product-name" type="text" required placeholder="Ex: Notebook" />
+        </label>
+        <label>
+          Price ($)
+          <input id="product-price" type="number" min="0" step="0.01" required placeholder="0.00" />
+        </label>
+        <label>
+          Initial inventory
+          <input id="product-stock" type="number" min="0" step="1" required placeholder="0" />
+        </label>
+        <button type="submit">Add Product</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2>Products & Inventory</h2>
+        <button id="clear-all" class="danger">Clear All</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Inventory</th>
+            <th>Sell</th>
+            <th>Restock</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="product-table-body"></tbody>
+      </table>
+      <p id="empty-state" class="muted">No products yet. Add one above to start managing inventory.</p>
+    </section>
+
+    <section class="card metrics">
+      <h2>Inventory Summary</h2>
+      <ul>
+        <li>Total products: <strong id="total-products">0</strong></li>
+        <li>Total units in stock: <strong id="total-stock">0</strong></li>
+        <li>Out-of-stock products: <strong id="out-of-stock">0</strong></li>
+        <li>Inventory value: <strong id="inventory-value">$0.00</strong></li>
+      </ul>
+    </section>
+  </main>
+
+  <template id="row-template">
+    <tr>
+      <td class="name"></td>
+      <td class="price"></td>
+      <td class="stock"></td>
+      <td>
+        <button class="sell-btn">Sell 1</button>
+      </td>
+      <td>
+        <div class="restock-controls">
+          <input class="restock-qty" type="number" min="1" step="1" value="1" />
+          <button class="restock-btn">Restock</button>
+        </div>
+      </td>
+      <td class="status"></td>
+    </tr>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
