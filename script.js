@@ -1,48 +1,50 @@
-const STORAGE_KEY = 'store-manager-products-v1';
-const LOW_STOCK_THRESHOLD = 5;
+const STORAGE_KEY = 'delivery-driver-stops-v1';
 
-const form = document.querySelector('#product-form');
-const nameInput = document.querySelector('#product-name');
-const priceInput = document.querySelector('#product-price');
-const stockInput = document.querySelector('#product-stock');
-const tableBody = document.querySelector('#product-table-body');
-const rowTemplate = document.querySelector('#row-template');
+const form = document.querySelector('#delivery-form');
+const customerInput = document.querySelector('#customer-name');
+const addressInput = document.querySelector('#delivery-address');
+const notesInput = document.querySelector('#delivery-notes');
+const deliveryList = document.querySelector('#delivery-list');
 const emptyState = document.querySelector('#empty-state');
 const clearAllButton = document.querySelector('#clear-all');
+const listTemplate = document.querySelector('#delivery-item-template');
 
-const totalProducts = document.querySelector('#total-products');
-const totalStock = document.querySelector('#total-stock');
-const outOfStock = document.querySelector('#out-of-stock');
-const inventoryValue = document.querySelector('#inventory-value');
+const totalStops = document.querySelector('#total-stops');
+const pendingStops = document.querySelector('#pending-stops');
+const deliveredStops = document.querySelector('#delivered-stops');
 
-let products = loadProducts();
+const mapFrame = document.querySelector('#map-frame');
+const mapsLink = document.querySelector('#maps-link');
+
+let stops = loadStops();
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  const product = {
+  const stop = {
     id: crypto.randomUUID(),
-    name: nameInput.value.trim(),
-    price: Number(priceInput.value),
-    stock: Number(stockInput.value),
+    customer: customerInput.value.trim(),
+    address: addressInput.value.trim(),
+    notes: notesInput.value.trim(),
+    delivered: false,
   };
 
-  if (!product.name || product.price < 0 || product.stock < 0) {
+  if (!stop.customer || !stop.address) {
     return;
   }
 
-  products.push(product);
+  stops.push(stop);
   persistAndRender();
   form.reset();
-  stockInput.value = '0';
 });
 
 clearAllButton.addEventListener('click', () => {
-  products = [];
+  stops = [];
   persistAndRender();
+  setMapLocation('New York, NY');
 });
 
-function loadProducts() {
+function loadStops() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) {
     return [];
@@ -57,106 +59,77 @@ function loadProducts() {
     return parsed
       .map((item) => ({
         id: String(item.id ?? crypto.randomUUID()),
-        name: String(item.name ?? '').trim(),
-        price: Number(item.price ?? 0),
-        stock: Number(item.stock ?? 0),
+        customer: String(item.customer ?? '').trim(),
+        address: String(item.address ?? '').trim(),
+        notes: String(item.notes ?? '').trim(),
+        delivered: Boolean(item.delivered),
       }))
-      .filter((item) => item.name.length > 0 && item.price >= 0 && item.stock >= 0);
+      .filter((item) => item.customer && item.address);
   } catch {
     return [];
   }
 }
 
 function persistAndRender() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(stops));
   render();
 }
 
 function render() {
-  tableBody.innerHTML = '';
+  deliveryList.innerHTML = '';
 
-  for (const product of products) {
-    const row = rowTemplate.content.firstElementChild.cloneNode(true);
-    row.querySelector('.name').textContent = product.name;
-    row.querySelector('.price').textContent = toCurrency(product.price);
-    row.querySelector('.stock').textContent = String(product.stock);
+  for (const stop of stops) {
+    const item = listTemplate.content.firstElementChild.cloneNode(true);
 
-    const sellButton = row.querySelector('.sell-btn');
-    sellButton.disabled = product.stock <= 0;
-    sellButton.addEventListener('click', () => {
-      adjustStock(product.id, -1);
+    item.querySelector('.customer').textContent = stop.customer;
+    item.querySelector('.address').textContent = stop.address;
+    item.querySelector('.notes').textContent = stop.notes || 'No delivery notes.';
+
+    const statusChip = item.querySelector('.status-chip');
+    statusChip.textContent = stop.delivered ? 'Delivered' : 'Pending';
+    statusChip.classList.add(stop.delivered ? 'delivered' : 'pending');
+
+    const toggleButton = item.querySelector('.toggle-btn');
+    toggleButton.textContent = stop.delivered ? 'Mark Pending' : 'Mark Delivered';
+    toggleButton.addEventListener('click', () => {
+      toggleDelivered(stop.id);
     });
 
-    const restockInput = row.querySelector('.restock-qty');
-    const restockButton = row.querySelector('.restock-btn');
-    restockButton.addEventListener('click', () => {
-      const quantity = Number(restockInput.value);
-      if (!Number.isInteger(quantity) || quantity <= 0) {
-        return;
-      }
-      adjustStock(product.id, quantity);
-      restockInput.value = '1';
+    const mapButton = item.querySelector('.map-btn');
+    mapButton.addEventListener('click', () => {
+      setMapLocation(stop.address);
     });
 
-    row.querySelector('.status').appendChild(createStatusChip(product.stock));
-
-    tableBody.appendChild(row);
+    deliveryList.appendChild(item);
   }
 
-  emptyState.classList.toggle('hidden', products.length > 0);
+  if (stops.length > 0) {
+    const firstPending = stops.find((stop) => !stop.delivered) ?? stops[0];
+    setMapLocation(firstPending.address);
+  }
+
+  emptyState.classList.toggle('hidden', stops.length > 0);
   updateSummary();
 }
 
-function createStatusChip(stock) {
-  const chip = document.createElement('span');
-  chip.className = 'status-chip';
-
-  if (stock <= 0) {
-    chip.classList.add('out');
-    chip.textContent = 'Out of stock';
-  } else if (stock <= LOW_STOCK_THRESHOLD) {
-    chip.classList.add('low');
-    chip.textContent = 'Low stock';
-  } else {
-    chip.classList.add('ok');
-    chip.textContent = 'In stock';
-  }
-
-  return chip;
-}
-
-function adjustStock(id, amount) {
-  products = products.map((product) => {
-    if (product.id !== id) {
-      return product;
-    }
-
-    return {
-      ...product,
-      stock: Math.max(0, product.stock + amount),
-    };
-  });
-
+function toggleDelivered(id) {
+  stops = stops.map((stop) => (stop.id === id ? { ...stop, delivered: !stop.delivered } : stop));
   persistAndRender();
 }
 
 function updateSummary() {
-  const productCount = products.length;
-  const stockCount = products.reduce((total, product) => total + product.stock, 0);
-  const outCount = products.filter((product) => product.stock === 0).length;
-  const value = products.reduce((total, product) => total + (product.price * product.stock), 0);
+  const total = stops.length;
+  const delivered = stops.filter((stop) => stop.delivered).length;
 
-  totalProducts.textContent = String(productCount);
-  totalStock.textContent = String(stockCount);
-  outOfStock.textContent = String(outCount);
-  inventoryValue.textContent = toCurrency(value);
+  totalStops.textContent = String(total);
+  deliveredStops.textContent = String(delivered);
+  pendingStops.textContent = String(total - delivered);
 }
 
-function toCurrency(amount) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount);
+function setMapLocation(address) {
+  const query = encodeURIComponent(address);
+  mapFrame.src = `https://www.google.com/maps?q=${query}&output=embed`;
+  mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
 render();

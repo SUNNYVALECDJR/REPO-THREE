@@ -1,15 +1,15 @@
-# Store Manager Interface
+# Delivery Driver Dispatch
 
-Simple browser-based store manager with inventory management.
+Simple browser-based delivery driver app with Google Maps integration.
 
 ## Features
 
-- Add products with price and initial inventory.
-- Sell units one at a time without allowing negative inventory.
-- Restock products with custom quantities.
-- Visual stock status (in stock / low stock / out of stock).
-- Inventory summary metrics for products, units, out-of-stock count, and inventory value.
-- Persists product data in browser localStorage.
+- Add delivery stops with customer name, address, and package notes.
+- Track route progress by marking stops as pending or delivered.
+- View shift summary metrics for total, pending, and delivered stops.
+- Integrated Google Maps embed updates to the selected stop.
+- Open selected destination directly in Google Maps for navigation.
+- Persists route data in browser localStorage.
 
 ## Run locally
 

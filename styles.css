@@ -9,7 +9,7 @@
 
 body {
   margin: 0;
-  background: #f4f6f9;
+  background: #eef3fb;
   color: #15223a;
 }
 
@@ -35,11 +35,12 @@ header h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
 form {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.75rem;
   align-items: end;
 }
@@ -58,20 +59,23 @@ button {
   font-size: 0.95rem;
 }
 
-button {
+button,
+.map-link {
   cursor: pointer;
   background: #1f64ff;
   color: white;
-  border-color: #1f64ff;
+  border: 1px solid #1f64ff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
 }
 
-button:hover {
+button:hover,
+.map-link:hover {
   filter: brightness(0.95);
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 button.danger {
@@ -79,17 +83,37 @@ button.danger {
   border-color: #cd2d3c;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.8rem;
+.delivery-list {
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
 }
 
-th,
-td {
-  text-align: left;
-  padding: 0.65rem;
-  border-bottom: 1px solid #edf1f7;
+.delivery-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid #e5ebf5;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.delivery-main h3 {
+  margin: 0;
+}
+
+.delivery-main p {
+  margin: 0.3rem 0 0;
+}
+
+.delivery-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .status-chip {
@@ -98,30 +122,17 @@ td {
   border-radius: 99px;
   font-size: 0.78rem;
   font-weight: 600;
+  align-self: center;
 }
 
-.status-chip.ok {
-  background: #daf6e8;
-  color: #0b6c40;
-}
-
-.status-chip.low {
+.status-chip.pending {
   background: #fff0c9;
   color: #8e6400;
 }
 
-.status-chip.out {
-  background: #ffd9de;
-  color: #8b1d2d;
-}
-
-.restock-controls {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.restock-qty {
-  width: 72px;
+.status-chip.delivered {
+  background: #daf6e8;
+  color: #0b6c40;
 }
 
 .metrics ul {
@@ -132,10 +143,28 @@ td {
   gap: 0.45rem;
 }
 
+.map-frame {
+  width: 100%;
+  height: 340px;
+  border: 0;
+  border-radius: 10px;
+  margin-top: 0.75rem;
+}
+
 .muted {
   color: #607089;
 }
 
 .hidden {
   display: none;
+}
+
+@media (max-width: 700px) {
+  .delivery-item {
+    flex-direction: column;
+  }
+
+  .delivery-actions {
+    justify-content: flex-start;
+  }
 }
