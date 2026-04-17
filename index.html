@@ -65,6 +65,67 @@
         src="https://www.google.com/maps?q=New+York+NY&output=embed">
       </iframe>
     </section>
+
+    <section class="card profile-card">
+      <h2>User Profile</h2>
+      <p class="muted">Save your checkout details for quick autofill.</p>
+      <form id="profile-form" class="stacked-form" autocomplete="on">
+        <label>
+          Name
+          <input id="profile-name" data-profile-field="name" type="text" placeholder="Ex: Maya Patel" />
+        </label>
+        <label>
+          Email
+          <input id="profile-email" data-profile-field="email" type="email" placeholder="name@example.com" />
+        </label>
+        <label>
+          Address
+          <input id="profile-address" data-profile-field="address" type="text" placeholder="Ex: 1600 Amphitheatre Pkwy" />
+        </label>
+        <label>
+          Payment info
+          <input id="profile-payment" data-profile-field="paymentInfo" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="Card number" />
+        </label>
+        <label>
+          Delivery instructions
+          <input id="profile-delivery" data-profile-field="deliveryInstructions" type="text" placeholder="Leave at front door" />
+        </label>
+        <div class="form-actions">
+          <button type="submit">Save Profile</button>
+          <button id="profile-load" type="button">Load Saved Profile</button>
+        </div>
+      </form>
+      <p id="profile-status" class="muted" role="status" aria-live="polite"></p>
+      <p>Saved payment display: <strong id="profile-payment-display">Not saved</strong></p>
+    </section>
+
+    <section class="card checkout-card">
+      <h2>Checkout</h2>
+      <p class="muted">Fields auto-fill from your saved profile when available.</p>
+      <form id="checkout-form" class="stacked-form" autocomplete="on">
+        <label>
+          Name
+          <input id="checkout-name" data-profile-field="name" type="text" required />
+        </label>
+        <label>
+          Email
+          <input id="checkout-email" data-profile-field="email" type="email" required />
+        </label>
+        <label>
+          Address
+          <input id="checkout-address" data-profile-field="address" type="text" required />
+        </label>
+        <label>
+          Payment info
+          <input id="checkout-payment" data-profile-field="paymentInfo" type="text" required />
+        </label>
+        <label>
+          Delivery instructions
+          <input id="checkout-delivery" data-profile-field="deliveryInstructions" type="text" />
+        </label>
+      </form>
+      <p>Checkout payment display: <strong id="checkout-payment-display">Not entered</strong></p>
+    </section>
   </main>
 
   <template id="delivery-item-template">

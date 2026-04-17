@@ -132,4 +132,148 @@ function setMapLocation(address) {
   mapsLink.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
 }
 
+const profileModule = (() => {
+  const PROFILE_STORAGE_KEY = 'user-profile-v1';
+  const PROFILE_FIELDS = ['name', 'email', 'address', 'paymentInfo', 'deliveryInstructions'];
+
+  const profileForm = document.querySelector('#profile-form');
+  const checkoutForm = document.querySelector('#checkout-form');
+  const profileStatus = document.querySelector('#profile-status');
+  const profileLoadButton = document.querySelector('#profile-load');
+  const profilePaymentDisplay = document.querySelector('#profile-payment-display');
+  const checkoutPaymentDisplay = document.querySelector('#checkout-payment-display');
+
+  const profileInputs = getFieldMap(profileForm);
+  const checkoutInputs = getFieldMap(checkoutForm);
+
+  const initialProfile = loadProfile();
+  applyProfileToForms(initialProfile, { updateStatus: false });
+
+  profileForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const profile = readFormData(profileInputs);
+    saveProfile(profile);
+    applyProfileToForms(profile, {
+      updateStatus: true,
+      statusMessage: 'Profile saved and checkout auto-filled.',
+    });
+  });
+
+  profileLoadButton?.addEventListener('click', () => {
+    const profile = loadProfile();
+    applyProfileToForms(profile, {
+      updateStatus: true,
+      statusMessage: hasAnyProfileValue(profile)
+        ? 'Saved profile loaded into profile and checkout forms.'
+        : 'No saved profile found yet.',
+    });
+  });
+
+  checkoutForm?.addEventListener('input', () => {
+    const checkoutPayment = checkoutInputs.paymentInfo?.value ?? '';
+    checkoutPaymentDisplay.textContent = maskSensitiveValue(checkoutPayment) || 'Not entered';
+  });
+
+  function getFieldMap(formElement) {
+    const map = {};
+
+    for (const field of PROFILE_FIELDS) {
+      const input = formElement?.querySelector(`[data-profile-field="${field}"]`);
+      if (input instanceof HTMLInputElement) {
+        map[field] = input;
+      }
+    }
+
+    return map;
+  }
+
+  function readFormData(inputMap) {
+    return PROFILE_FIELDS.reduce((profile, field) => {
+      const value = inputMap[field]?.value ?? '';
+      profile[field] = String(value).trim();
+      return profile;
+    }, {});
+  }
+
+  function loadProfile() {
+    const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
+
+    if (!raw) {
+      return emptyProfile();
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      return sanitizeProfile(parsed);
+    } catch {
+      return emptyProfile();
+    }
+  }
+
+  function saveProfile(profile) {
+    const sanitized = sanitizeProfile(profile);
+    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(sanitized));
+  }
+
+  function sanitizeProfile(raw) {
+    const source = raw && typeof raw === 'object' ? raw : {};
+
+    return PROFILE_FIELDS.reduce((profile, field) => {
+      profile[field] = String(source[field] ?? '').trim();
+      return profile;
+    }, {});
+  }
+
+  function emptyProfile() {
+    return sanitizeProfile({});
+  }
+
+  function hasAnyProfileValue(profile) {
+    return PROFILE_FIELDS.some((field) => Boolean(profile[field]));
+  }
+
+  function applyProfileToForms(profile, options = {}) {
+    const normalized = sanitizeProfile(profile);
+
+    setFormData(profileInputs, normalized);
+    setFormData(checkoutInputs, normalized);
+
+    profilePaymentDisplay.textContent = maskSensitiveValue(normalized.paymentInfo) || 'Not saved';
+    checkoutPaymentDisplay.textContent = maskSensitiveValue(normalized.paymentInfo) || 'Not entered';
+
+    if (options.updateStatus) {
+      profileStatus.textContent = options.statusMessage ?? '';
+    }
+  }
+
+  function setFormData(inputMap, profile) {
+    for (const field of PROFILE_FIELDS) {
+      const input = inputMap[field];
+      if (input) {
+        input.value = profile[field] ?? '';
+      }
+    }
+  }
+
+  function maskSensitiveValue(value) {
+    const digitsOnly = String(value).replace(/\D/g, '');
+
+    if (!digitsOnly) {
+      return '';
+    }
+
+    const visible = digitsOnly.slice(-4);
+    const maskedLength = Math.max(digitsOnly.length - visible.length, 0);
+    return `${'*'.repeat(maskedLength)}${visible}`;
+  }
+
+  return {
+    loadProfile,
+    saveProfile,
+  };
+})();
+
+void profileModule;
+
 render();

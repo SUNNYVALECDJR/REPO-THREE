@@ -45,6 +45,17 @@ form {
   align-items: end;
 }
 
+.stacked-form {
+  grid-template-columns: 1fr;
+  max-width: 560px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
 label {
   display: grid;
   gap: 0.35rem;
