@@ -78,12 +78,35 @@ button:hover,
   filter: brightness(0.95);
 }
 
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 button.danger {
   background: #cd2d3c;
   border-color: #cd2d3c;
 }
 
-.delivery-list {
+.view-switch {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.view-switch button {
+  background: #dce7ff;
+  color: #15397f;
+  border-color: #dce7ff;
+}
+
+.view-switch button.active {
+  background: #1f64ff;
+  color: #fff;
+  border-color: #1f64ff;
+}
+
+.delivery-list,
+.order-list {
   list-style: none;
   margin: 0.8rem 0 0;
   padding: 0;
@@ -91,7 +114,8 @@ button.danger {
   gap: 0.8rem;
 }
 
-.delivery-item {
+.delivery-item,
+.order-item {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -100,15 +124,18 @@ button.danger {
   padding: 0.75rem;
 }
 
-.delivery-main h3 {
+.delivery-main h3,
+.order-item h3 {
   margin: 0;
 }
 
-.delivery-main p {
+.delivery-main p,
+.order-item p {
   margin: 0.3rem 0 0;
 }
 
-.delivery-actions {
+.delivery-actions,
+.order-actions {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -123,6 +150,7 @@ button.danger {
   font-size: 0.78rem;
   font-weight: 600;
   align-self: center;
+  text-transform: capitalize;
 }
 
 .status-chip.pending {
@@ -130,9 +158,15 @@ button.danger {
   color: #8e6400;
 }
 
-.status-chip.delivered {
+.status-chip.delivered,
+.status-chip.approved {
   background: #daf6e8;
   color: #0b6c40;
+}
+
+.status-chip.rejected {
+  background: #fde1e4;
+  color: #9f1d2b;
 }
 
 .metrics ul {
@@ -151,6 +185,37 @@ button.danger {
   margin-top: 0.75rem;
 }
 
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.65rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.65rem;
+  border-bottom: 1px solid #e5ebf5;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.bulk-form {
+  grid-template-columns: minmax(240px, 320px) auto;
+}
+
+.admin-grid-form {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
 .muted {
   color: #607089;
 }
@@ -160,11 +225,17 @@ button.danger {
 }
 
 @media (max-width: 700px) {
-  .delivery-item {
+  .delivery-item,
+  .order-item {
     flex-direction: column;
   }
 
-  .delivery-actions {
+  .delivery-actions,
+  .order-actions {
     justify-content: flex-start;
+  }
+
+  .bulk-form {
+    grid-template-columns: 1fr;
   }
 }

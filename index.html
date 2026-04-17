@@ -13,57 +13,136 @@
       <p>Track active stops, update delivery status, and navigate with Google Maps.</p>
     </header>
 
-    <section class="card">
-      <h2>Add Delivery Stop</h2>
-      <form id="delivery-form">
-        <label>
-          Customer
-          <input id="customer-name" type="text" required placeholder="Ex: Maya Patel" />
-        </label>
-        <label>
-          Address
-          <input id="delivery-address" type="text" required placeholder="Ex: 1600 Amphitheatre Pkwy, Mountain View, CA" />
-        </label>
-        <label>
-          Package notes
-          <input id="delivery-notes" type="text" placeholder="Gate code, apartment, etc." />
-        </label>
-        <button type="submit">Add Stop</button>
-      </form>
+    <nav class="view-switch card" aria-label="Application sections">
+      <button id="show-customer-view" class="active" type="button">Customer Dispatch</button>
+      <button id="show-admin-view" type="button">Store Admin Dashboard</button>
+    </nav>
+
+    <section id="customer-app">
+      <section class="card">
+        <h2>Add Delivery Stop</h2>
+        <form id="delivery-form">
+          <label>
+            Customer
+            <input id="customer-name" type="text" required placeholder="Ex: Maya Patel" />
+          </label>
+          <label>
+            Address
+            <input id="delivery-address" type="text" required placeholder="Ex: 1600 Amphitheatre Pkwy, Mountain View, CA" />
+          </label>
+          <label>
+            Package notes
+            <input id="delivery-notes" type="text" placeholder="Gate code, apartment, etc." />
+          </label>
+          <button type="submit">Add Stop</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Route Stops</h2>
+          <button id="clear-all" class="danger" type="button">Clear Route</button>
+        </div>
+        <p id="empty-state" class="muted">No delivery stops yet. Add one above to build your route.</p>
+        <ul id="delivery-list" class="delivery-list"></ul>
+      </section>
+
+      <section class="card metrics">
+        <h2>Shift Summary</h2>
+        <ul>
+          <li>Total stops: <strong id="total-stops">0</strong></li>
+          <li>Pending: <strong id="pending-stops">0</strong></li>
+          <li>Delivered: <strong id="delivered-stops">0</strong></li>
+        </ul>
+      </section>
+
+      <section class="card map-card">
+        <div class="card-header">
+          <h2>Google Maps Navigation</h2>
+          <a id="maps-link" class="map-link" href="https://maps.google.com" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+        </div>
+        <p class="muted">Select a stop from your route to load turn-by-turn context in the embedded map.</p>
+        <iframe
+          id="map-frame"
+          class="map-frame"
+          title="Google Maps"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=New+York+NY&output=embed">
+        </iframe>
+      </section>
     </section>
 
-    <section class="card">
-      <div class="card-header">
-        <h2>Route Stops</h2>
-        <button id="clear-all" class="danger">Clear Route</button>
-      </div>
-      <p id="empty-state" class="muted">No delivery stops yet. Add one above to build your route.</p>
-      <ul id="delivery-list" class="delivery-list"></ul>
-    </section>
+    <section id="admin-app" class="hidden">
+      <section class="card">
+        <h2>Inventory Management</h2>
+        <form id="inventory-form" class="admin-grid-form">
+          <label>
+            Product name
+            <input id="inventory-name" type="text" required placeholder="Ex: Bananas" />
+          </label>
+          <label>
+            Category
+            <input id="inventory-category" type="text" required placeholder="Ex: Produce" />
+          </label>
+          <label>
+            Price ($)
+            <input id="inventory-price" type="number" min="0" step="0.01" required placeholder="0.00" />
+          </label>
+          <label>
+            Stock quantity
+            <input id="inventory-stock" type="number" min="0" step="1" required placeholder="0" />
+          </label>
+          <button id="inventory-submit" type="submit">Add Product</button>
+        </form>
+      </section>
 
-    <section class="card metrics">
-      <h2>Shift Summary</h2>
-      <ul>
-        <li>Total stops: <strong id="total-stops">0</strong></li>
-        <li>Pending: <strong id="pending-stops">0</strong></li>
-        <li>Delivered: <strong id="delivered-stops">0</strong></li>
-      </ul>
-    </section>
+      <section class="card">
+        <div class="card-header">
+          <h2>Price Updates</h2>
+        </div>
+        <form id="bulk-markup-form" class="bulk-form">
+          <label>
+            Bulk markup (%)
+            <input id="bulk-markup-value" type="number" step="0.1" placeholder="Ex: 5 for +5%" />
+          </label>
+          <button type="submit">Apply Markup to All Products</button>
+        </form>
+      </section>
 
-    <section class="card map-card">
-      <div class="card-header">
-        <h2>Google Maps Navigation</h2>
-        <a id="maps-link" class="map-link" href="https://maps.google.com" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
-      </div>
-      <p class="muted">Select a stop from your route to load turn-by-turn context in the embedded map.</p>
-      <iframe
-        id="map-frame"
-        class="map-frame"
-        title="Google Maps"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q=New+York+NY&output=embed">
-      </iframe>
+      <section class="card">
+        <h2>Product List</h2>
+        <p id="inventory-empty" class="muted">No products in inventory yet.</p>
+        <div class="table-wrap">
+          <table class="admin-table" id="inventory-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Order List</h2>
+        <p id="orders-empty" class="muted">No orders yet.</p>
+        <ul id="order-list" class="order-list"></ul>
+      </section>
+
+      <section class="card metrics">
+        <h2>Basic Reporting</h2>
+        <ul>
+          <li>Total orders: <strong id="report-total-orders">0</strong></li>
+          <li>Revenue (approved): <strong id="report-revenue">$0.00</strong></li>
+          <li>Low stock alerts (&lt;= 5): <strong id="report-low-stock">0</strong></li>
+        </ul>
+      </section>
     </section>
   </main>
 
@@ -76,8 +155,8 @@
       </div>
       <div class="delivery-actions">
         <span class="status-chip"></span>
-        <button class="map-btn">View on Map</button>
-        <button class="toggle-btn">Mark Delivered</button>
+        <button class="map-btn" type="button">View on Map</button>
+        <button class="toggle-btn" type="button">Mark Delivered</button>
       </div>
     </li>
   </template>
