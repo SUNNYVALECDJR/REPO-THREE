@@ -3,81 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delivery Driver Dispatch</title>
+  <title>FreshCart Grocery</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="container">
     <header>
-      <h1>Delivery Driver Dispatch</h1>
-      <p>Track active stops, update delivery status, and navigate with Google Maps.</p>
+      <h1>FreshCart Grocery</h1>
+      <p>Browse products, filter quickly, and check out with transparent pricing.</p>
     </header>
 
-    <section class="card">
-      <h2>Add Delivery Stop</h2>
-      <form id="delivery-form">
+    <section class="card controls-card">
+      <h2>Find Products</h2>
+      <div class="controls-grid">
         <label>
-          Customer
-          <input id="customer-name" type="text" required placeholder="Ex: Maya Patel" />
+          Search
+          <input id="search-input" type="search" placeholder="Search products..." />
         </label>
         <label>
-          Address
-          <input id="delivery-address" type="text" required placeholder="Ex: 1600 Amphitheatre Pkwy, Mountain View, CA" />
+          Category
+          <select id="category-filter">
+            <option value="all">All categories</option>
+          </select>
         </label>
-        <label>
-          Package notes
-          <input id="delivery-notes" type="text" placeholder="Gate code, apartment, etc." />
+        <label class="toggle-label">
+          <input id="stock-toggle" type="checkbox" />
+          In-stock only
         </label>
-        <button type="submit">Add Stop</button>
-      </form>
+      </div>
     </section>
 
     <section class="card">
       <div class="card-header">
-        <h2>Route Stops</h2>
-        <button id="clear-all" class="danger">Clear Route</button>
+        <h2>Store</h2>
+        <p id="results-count" class="muted"></p>
       </div>
-      <p id="empty-state" class="muted">No delivery stops yet. Add one above to build your route.</p>
-      <ul id="delivery-list" class="delivery-list"></ul>
+      <p id="empty-state" class="muted hidden">No products match your filters.</p>
+      <ul id="product-list" class="product-list"></ul>
     </section>
 
-    <section class="card metrics">
-      <h2>Shift Summary</h2>
-      <ul>
-        <li>Total stops: <strong id="total-stops">0</strong></li>
-        <li>Pending: <strong id="pending-stops">0</strong></li>
-        <li>Delivered: <strong id="delivered-stops">0</strong></li>
-      </ul>
-    </section>
-
-    <section class="card map-card">
+    <section class="card">
       <div class="card-header">
-        <h2>Google Maps Navigation</h2>
-        <a id="maps-link" class="map-link" href="https://maps.google.com" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+        <h2>Cart</h2>
+        <button id="clear-cart" class="danger">Clear Cart</button>
       </div>
-      <p class="muted">Select a stop from your route to load turn-by-turn context in the embedded map.</p>
-      <iframe
-        id="map-frame"
-        class="map-frame"
-        title="Google Maps"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q=New+York+NY&output=embed">
-      </iframe>
+      <p id="empty-cart" class="muted">Your cart is empty.</p>
+      <ul id="cart-list" class="cart-list"></ul>
+
+      <div class="promo-row">
+        <label>
+          Promo code
+          <input id="promo-input" type="text" placeholder="SAVE10 or WELCOME5" />
+        </label>
+        <button id="apply-promo">Apply</button>
+        <button id="remove-promo" class="ghost">Remove</button>
+      </div>
+      <p id="promo-message" class="muted"></p>
+
+      <div class="totals">
+        <p>Subtotal <strong id="subtotal-value">$0.00</strong></p>
+        <p>Discount <strong id="discount-value">-$0.00</strong></p>
+        <p>Delivery <strong id="delivery-value">$0.00</strong></p>
+        <p class="total-row">Total <strong id="total-value">$0.00</strong></p>
+        <p id="delivery-note" class="muted"></p>
+      </div>
+
+      <button id="checkout-btn" class="checkout-btn">Proceed to Checkout</button>
     </section>
   </main>
 
-  <template id="delivery-item-template">
-    <li class="delivery-item">
-      <div class="delivery-main">
-        <h3 class="customer"></h3>
-        <p class="address"></p>
-        <p class="notes muted"></p>
+  <template id="product-item-template">
+    <li class="product-item">
+      <div>
+        <h3 class="name"></h3>
+        <p class="meta muted"></p>
+        <p class="price"></p>
       </div>
-      <div class="delivery-actions">
-        <span class="status-chip"></span>
-        <button class="map-btn">View on Map</button>
-        <button class="toggle-btn">Mark Delivered</button>
+      <button class="add-btn">Add to cart</button>
+    </li>
+  </template>
+
+  <template id="cart-item-template">
+    <li class="cart-item">
+      <div>
+        <h3 class="name"></h3>
+        <p class="line-price muted"></p>
+      </div>
+      <div class="qty-actions">
+        <button class="decrease ghost">−</button>
+        <span class="qty"></span>
+        <button class="increase">+</button>
       </div>
     </li>
   </template>
