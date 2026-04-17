@@ -1,87 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Delivery Driver Dispatch</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <main class="container">
-    <header>
-      <h1>Delivery Driver Dispatch</h1>
-      <p>Track active stops, update delivery status, and navigate with Google Maps.</p>
-    </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grocery Cart</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <h1>Grocery Shopping</h1>
+        <p>Select a store, add items to your cart, and check out.</p>
+      </header>
 
-    <section class="card">
-      <h2>Add Delivery Stop</h2>
-      <form id="delivery-form">
-        <label>
-          Customer
-          <input id="customer-name" type="text" required placeholder="Ex: Maya Patel" />
-        </label>
-        <label>
-          Address
-          <input id="delivery-address" type="text" required placeholder="Ex: 1600 Amphitheatre Pkwy, Mountain View, CA" />
-        </label>
-        <label>
-          Package notes
-          <input id="delivery-notes" type="text" placeholder="Gate code, apartment, etc." />
-        </label>
-        <button type="submit">Add Stop</button>
-      </form>
-    </section>
+      <section class="panel">
+        <h2>Stores</h2>
+        <ul id="store-list" class="store-list" aria-label="Store list"></ul>
+      </section>
 
-    <section class="card">
-      <div class="card-header">
-        <h2>Route Stops</h2>
-        <button id="clear-all" class="danger">Clear Route</button>
-      </div>
-      <p id="empty-state" class="muted">No delivery stops yet. Add one above to build your route.</p>
-      <ul id="delivery-list" class="delivery-list"></ul>
-    </section>
+      <section class="panel">
+        <h2 id="products-title">Products</h2>
+        <ul id="product-list" class="product-list" aria-label="Product list"></ul>
+      </section>
 
-    <section class="card metrics">
-      <h2>Shift Summary</h2>
-      <ul>
-        <li>Total stops: <strong id="total-stops">0</strong></li>
-        <li>Pending: <strong id="pending-stops">0</strong></li>
-        <li>Delivered: <strong id="delivered-stops">0</strong></li>
-      </ul>
-    </section>
+      <section class="panel">
+        <h2>Cart</h2>
+        <ul id="cart-list" class="cart-list" aria-label="Cart items"></ul>
+        <p id="cart-empty" class="muted">Your cart is empty.</p>
 
-    <section class="card map-card">
-      <div class="card-header">
-        <h2>Google Maps Navigation</h2>
-        <a id="maps-link" class="map-link" href="https://maps.google.com" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
-      </div>
-      <p class="muted">Select a stop from your route to load turn-by-turn context in the embedded map.</p>
-      <iframe
-        id="map-frame"
-        class="map-frame"
-        title="Google Maps"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q=New+York+NY&output=embed">
-      </iframe>
-    </section>
-  </main>
+        <div class="cart-summary">
+          <p>Items: <strong id="cart-count">0</strong></p>
+          <p>Total: <strong id="cart-total">$0.00</strong></p>
+        </div>
+      </section>
 
-  <template id="delivery-item-template">
-    <li class="delivery-item">
-      <div class="delivery-main">
-        <h3 class="customer"></h3>
-        <p class="address"></p>
-        <p class="notes muted"></p>
-      </div>
-      <div class="delivery-actions">
-        <span class="status-chip"></span>
-        <button class="map-btn">View on Map</button>
-        <button class="toggle-btn">Mark Delivered</button>
-      </div>
-    </li>
-  </template>
+      <section class="panel">
+        <h2>Checkout</h2>
+        <form id="checkout-form" class="checkout-form" novalidate>
+          <label>
+            Name
+            <input type="text" id="checkout-name" name="name" autocomplete="name" required />
+          </label>
 
-  <script src="script.js"></script>
-</body>
+          <label>
+            Email
+            <input type="email" id="checkout-email" name="email" autocomplete="email" required />
+          </label>
+
+          <label>
+            Address
+            <textarea id="checkout-address" name="address" rows="3" autocomplete="street-address" required></textarea>
+          </label>
+
+          <button type="submit">Place Order</button>
+          <p id="checkout-message" class="checkout-message" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
 </html>
