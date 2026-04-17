@@ -1,15 +1,14 @@
-# Delivery Driver Dispatch
+# Grocery Shopping App
 
-Simple browser-based delivery driver app with Google Maps integration.
+Minimal single-page grocery shopping app built with plain JavaScript.
 
 ## Features
 
-- Add delivery stops with customer name, address, and package notes.
-- Track route progress by marking stops as pending or delivered.
-- View shift summary metrics for total, pending, and delivered stops.
-- Integrated Google Maps embed updates to the selected stop.
-- Open selected destination directly in Google Maps for navigation.
-- Persists route data in browser localStorage.
+- Browse a list of stores.
+- View products for the selected store.
+- Add and remove items from a cart.
+- See cart item count and total cost.
+- Submit a basic checkout form (name, email, address).
 
 ## Run locally
 
@@ -17,4 +16,4 @@ Simple browser-based delivery driver app with Google Maps integration.
 python3 -m http.server 4173
 ```
 
-Open <http://localhost:4173> in your browser.
+Open <http://localhost:4173>.
